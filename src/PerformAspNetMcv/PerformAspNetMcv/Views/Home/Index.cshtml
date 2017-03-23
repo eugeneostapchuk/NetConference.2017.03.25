@@ -1,0 +1,145 @@
+﻿@using System.Diagnostics
+@using PerformAspNetMcv.Controllers
+@using PerformAspNetMcv.Tips;
+
+@{
+    ViewBag.Title = "Home Page";
+
+    var urlCount = 1000;
+    var stopWatch = new Stopwatch();
+}
+
+<div class="jumbotron">
+    <h2>Make Asp.Net Mvc great again</h2>
+</div>
+
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            @Html.ActionLink("Make Asp.Net Mvc great again", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+        };
+    </div>
+
+    @StatisticRow("Simple url", stopWatch)
+    
+</div>
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            @(Html.ActionLink<HomeController>("Make Asp.Net Mvc great again", x => x.Index(), null, null))
+        };
+
+    </div>
+
+    @StatisticRow("Strong typed urls", stopWatch)
+</div>
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            @(Html.ActionLink<HomeController>("Make Asp.Net Mvc great again", x => x.WithParameters("1"), null, null))
+        };
+    </div>
+
+    @StatisticRow("Strong typed with parameters", stopWatch)
+</div>
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            @(Html.A<IndexFastController>("Make Asp.Net Mvc great again", ""))
+        };
+    </div>
+
+    @StatisticRow("Fast typed", stopWatch)
+</div>
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            @(Html.AWithDirectWriter<IndexFastController>("Make Asp.Net Mvc great again", ""))
+        };
+    </div>
+
+    @StatisticRow("Fast typed with direct writer", stopWatch)
+</div>
+
+<div  clas="row" style="margin-top: 20px;"></div>
+
+
+@ClearSimpleElapsed()
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            <img src="/test"/>
+        };
+    </div>
+
+    @StatisticRow("Raw img html", stopWatch)
+</div>
+
+
+<div class="row">
+    @{stopWatch.Start();}
+    <div style="display: none;">
+        @for (int i = 0; i < urlCount; i++)
+        {
+            @(Html.ImgWithDirectWriter("/test"))
+        };
+    </div>
+
+    @StatisticRow("Img direct writer", stopWatch)
+</div>
+
+@helper ClearSimpleElapsed()
+{
+    this.ViewData["simpleElapsed"] = null;
+}
+
+@helper StatisticRow(string title, Stopwatch stopwatch)
+{
+stopwatch.Stop();
+
+TimeSpan simpleElapsed = TimeSpan.Zero;
+var percents = 1.0;
+
+if (this.ViewData["simpleElapsed"] == null)
+{
+    this.ViewData["simpleElapsed"] = stopwatch.Elapsed;
+}
+else
+{
+    simpleElapsed = (TimeSpan)this.ViewData["simpleElapsed"];
+    var elapsedMSec = stopwatch.Elapsed.TotalMilliseconds;
+    var simpleElapsedMSec = simpleElapsed.TotalMilliseconds;
+    percents = Math.Round(simpleElapsedMSec / elapsedMSec, 2);
+}
+
+    <div class="row">
+        <div class="col-lg-3">
+            @title
+        </div>
+
+        <div class="col-lg-9 ">
+            <strong>@(stopwatch.Elapsed)&nbsp;msec &nbsp;x@(percents)</strong>
+        </div>
+    </div>
+
+    stopwatch.Reset();
+
+}
