@@ -156,6 +156,7 @@
     <Compile Include="Tips\Extensions.cs" />
     <Compile Include="Tips\HtmlHelperExtensions.cs" />
     <Compile Include="Tips\IRouteUrl.cs" />
+    <Compile Include="Tips\RouteHandler.cs" />
     <Compile Include="Tips\RouteUrlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

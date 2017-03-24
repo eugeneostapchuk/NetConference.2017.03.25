@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
+using PerformAspNetMcv.Tips;
 
 namespace PerformAspNetMcv
 {
@@ -24,6 +21,14 @@ namespace PerformAspNetMcv
                 url: "fasturl",
                 defaults: new { controller = "IndexFast", action = "Invoke"}
             );
+
+            var route = new Route("testurl", new RouteHandler())
+            {
+                Defaults = new RouteValueDictionary(),
+                Constraints = new RouteValueDictionary()
+            };
+
+            routes.Add(route);
         }
     }
 }
